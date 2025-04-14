@@ -1,0 +1,18 @@
+# 虛擬環境
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# FAISS 索引（可選，若檔案大）
+vector.index
+vector.index.metadata.json
+
+# 其他
+*.log
+.DS_Store
