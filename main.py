@@ -650,7 +650,7 @@ if __name__ == '__main__':
     initialize()
     try:
         port = int(os.environ.get("PORT", 5000))
-        logger.info(f"啟動 Waitress 服務於 http://127.0.0.1:{port}")
+        logger.info(f"啟動 Waitress 服務於 http://0.0.0.0:{port}")
         serve(app, host='0.0.0.0', port=port, threads=1)
     except Exception as e:
         logger.error(f"啟動服務失敗: {e}")
