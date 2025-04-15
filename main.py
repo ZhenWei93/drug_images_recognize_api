@@ -279,6 +279,264 @@
 
 
 
+
+
+
+
+
+
+
+
+
+# import os
+# from glob import glob
+# from PIL import Image
+# import numpy as np
+# import faiss
+# from sentence_transformers import SentenceTransformer
+# from flask import Flask, request, jsonify
+# import json
+# import sys
+# import io
+# import requests
+# import zipfile
+# import logging
+# from waitress import serve
+
+# # 設定日誌
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# logger = logging.getLogger(__name__)
+
+# # 設定 UTF-8 編碼
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+# # 初始化 Flask 應用
+# app = Flask(__name__)
+
+# # 確保工作目錄
+# try:
+#     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+#     logger.info(f"工作目錄設為: {os.getcwd()}")
+# except Exception as e:
+#     logger.error(f"設定工作目錄失敗: {e}")
+#     sys.exit(1)
+
+# # 下載並解壓檔案
+# def download_and_extract_zip(url, output_zip="data.zip", extract_to="."):
+#     logger.info("正在下載檔案...")
+#     try:
+#         response = requests.get(url, stream=True, timeout=30)
+#         response.raise_for_status()
+#         with open(output_zip, "wb") as f:
+#             for chunk in response.iter_content(chunk_size=8192):
+#                 f.write(chunk)
+#         logger.info("下載完成，開始解壓...")
+#         with zipfile.ZipFile(output_zip, 'r') as zip_ref:
+#             zip_ref.extractall(extract_to)
+#         os.remove(output_zip)
+#         logger.info("解壓完成")
+#     except Exception as e:
+#         logger.error(f"下載或解壓失敗: {e}")
+#         raise
+
+# # 設定路徑
+# DATABASE_PATH = os.path.join(os.getcwd(), "medicine_images")
+# OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
+# QUERY_PATH = os.path.join(os.getcwd(), "query_images")
+
+# # 初始化全局變數
+# model = None
+# index = None
+# metadata_dict = None
+
+# # 定義生成 CLIP 嵌入的函數
+# def generate_clip_embeddings(images_path, model):
+#     image_paths = glob(os.path.join(images_path, '*.jpg'))
+#     if not image_paths:
+#         raise Exception(f"No images found in {images_path}")
+#     embeddings = []
+#     file_names = []
+    
+#     logger.info(f"正在為資料庫生成嵌入，找到 {len(image_paths)} 張圖片")
+#     for img_path in image_paths:
+#         try:
+#             image = Image.open(img_path).convert('RGB')
+#             embedding = model.encode(image, show_progress_bar=False)
+#             embeddings.append(embedding)
+#             file_names.append(os.path.basename(img_path))
+#             logger.info(f"已處理: {os.path.basename(img_path)}")
+#         except Exception as e:
+#             logger.error(f"處理 {img_path} 時出錯: {e}")
+#             continue
+    
+#     if not embeddings:
+#         raise Exception("No valid embeddings generated")
+#     return embeddings, image_paths, file_names
+
+# # 創建 FAISS 索引
+# def create_faiss_index(embeddings, image_paths, file_names, output_path):
+#     if not embeddings:
+#         raise Exception("No embeddings provided for indexing")
+#     dimension = len(embeddings[0])
+#     index = faiss.IndexFlatIP(dimension)
+#     index = faiss.IndexIDMap(index)
+    
+#     vectors = np.array(embeddings).astype(np.float32)
+#     index.add_with_ids(vectors, np.array(range(len(embeddings))))
+    
+#     faiss.write_index(index, output_path)
+#     logger.info(f"索引已保存至 {output_path}")
+    
+#     metadata = []
+#     metadata_path = output_path + '.metadata.json'
+#     medicine_info = {
+#         "福善美保骨錠-1.jpg": {"medicationCode":"1AMZ08", "genericName":"Alendronate", "chineseBrandName": "福善美保骨錠","englishBrandName": "Fosamax PLUS"},
+#         "福善美保骨錠-2.jpg": {"medicationCode":"1AMZ08", "genericName":"Alendronate", "chineseBrandName": "福善美保骨錠","englishBrandName": "Fosamax PLUS"},
+#         "芙琳亞錠-1.jpg": {"medicationCode":"1MAC12", "genericName":"Calcium Folinate", "chineseBrandName": "芙琳亞錠","englishBrandName": "Folina"},
+#         "芙琳亞錠-2.jpg": {"medicationCode":"1MAC12", "genericName":"Calcium Folinate", "chineseBrandName": "芙琳亞錠","englishBrandName": "Folina"},
+#         "達滋克膜衣錠-1.jpg": {"medicationCode":"1MBD06", "genericName":"Lamivudine/Tenofovir/Doravirine", "chineseBrandName": "達滋克膜衣錠","englishBrandName": "FDelstrigo"},
+#         "達滋克膜衣錠-2.jpg": {"medicationCode":"1MBD06", "genericName":"Lamivudine/Tenofovir/Doravirine", "chineseBrandName": "達滋克膜衣錠","englishBrandName": "FDelstrigo"},
+#         "敵芬妮朵糖衣錠-1.jpg": {"medicationCode":"1MAD01", "genericName":"Diphenidol HCl", "chineseBrandName": "敵芬妮朵糖衣錠","englishBrandName": "Diphenidol"},
+#         "解鐵定膜衣錠-1.jpg": {"medicationCode":"1MAD07", "genericName":"Deferasirox", "chineseBrandName": "解鐵定膜衣錠","englishBrandName": "Jadenu"},
+#         "解鐵定膜衣錠-2.jpg": {"medicationCode":"1MAD07", "genericName":"Deferasirox", "chineseBrandName": "解鐵定膜衣錠","englishBrandName": "Jadenu"},
+#         "佩你安錠-1.jpg": {"medicationCode":"1MAC08", "genericName":"Cyproheptadine HCl", "chineseBrandName": "佩你安錠","englishBrandName": "Pilian"},
+#         "佩你安錠-2.jpg": {"medicationCode":"1MAC08", "genericName":"Cyproheptadine HCl", "chineseBrandName": "佩你安錠","englishBrandName": "Pilian"},
+#         "法瑪鎮膜衣錠-1.jpg": {"medicationCode":"1MAF07", "genericName":"Famotidine", "chineseBrandName": "法瑪鎮膜衣錠","englishBrandName": "Famotidine"},
+#         "法瑪鎮膜衣錠-2.jpg": {"medicationCode":"1MAF07", "genericName":"Famotidine", "chineseBrandName": "法瑪鎮膜衣錠","englishBrandName": "Famotidine"},
+#         "睦體康腸衣錠-1.jpg": {"medicationCode":"1AMZ07", "genericName":"Mycophenolate Sodium", "chineseBrandName": "睦體康腸衣錠","englishBrandName": "Myfortic"},
+#         "睦體康腸衣錠-2.jpg": {"medicationCode":"1AMZ07", "genericName":"Mycophenolate Sodium", "chineseBrandName": "睦體康腸衣錠","englishBrandName": "Myfortic"},
+#         "樂伯克錠-1.jpg": {"medicationCode":"1AMG21", "genericName":"Pramipexole", "chineseBrandName": "樂伯克錠","englishBrandName": "Mirapex"},
+#         "樂伯克錠-2.jpg": {"medicationCode":"1AMG21", "genericName":"Pramipexole", "chineseBrandName": "樂伯克錠","englishBrandName": "Mirapex"},
+#         "諾博戈膜衣錠-1.jpg": {"medicationCode":"1MDD09", "genericName":"Darolutamide", "chineseBrandName": "諾博戈膜衣錠","englishBrandName": "Nubeqa"},
+#         "諾博戈膜衣錠-2.jpg": {"medicationCode":"1MDD09", "genericName":"Darolutamide", "chineseBrandName": "諾博戈膜衣錠","englishBrandName": "Nubeqa"}
+#     }
+#     for img_path, file_name in zip(image_paths, file_names):
+#         info = medicine_info.get(file_name, {"medicationCode": "UNKNOWN", "chineseBrandName": "未知藥品"})
+#         metadata.append({
+#             "file_name": file_name,
+#             "full_path": img_path,
+#             "additional_info": info
+#         })
+    
+#     with open(metadata_path, 'w', encoding='utf-8') as f:
+#         json.dump(metadata, f, indent=4)
+    
+#     logger.info(f"元數據已保存至 {metadata_path}")
+#     return index
+
+# # 讀取 FAISS 索引
+# def load_faiss_index(index_path):
+#     try:
+#         index = faiss.read_index(index_path)
+#         with open(index_path + '.metadata.json', 'r', encoding='utf-8') as f:
+#             metadata = json.load(f)
+#         metadata_dict = {item["file_name"]: item for item in metadata}
+#         logger.info(f"索引已從 {index_path} 載入")
+#         return index, metadata_dict
+#     except Exception as e:
+#         logger.error(f"載入索引失敗: {e}")
+#         raise
+
+# # 初始化模型和索引
+# def initialize():
+#     global model, index, metadata_dict
+#     try:
+#         logger.info("正在載入模型...")
+#         model = SentenceTransformer('clip-ViT-B-32', device='cpu')
+#         logger.info("模型載入完成")
+        
+#         if not os.path.exists(DATABASE_PATH) or not glob(os.path.join(DATABASE_PATH, "*.jpg")):
+#             os.makedirs(DATABASE_PATH, exist_ok=True)
+#             download_and_extract_zip(
+#                 "https://drive.usercontent.google.com/download?id=1rVmGMzxnxs5twJ27A4TeP1TDZb4x3pOF&export=download&authuser=0",
+#                 extract_to=DATABASE_PATH
+#             )
+        
+#         if not os.path.exists(QUERY_PATH):
+#             os.makedirs(QUERY_PATH)
+#             logger.info(f"已創建查詢資料夾: {QUERY_PATH}")
+        
+#         database_files = glob(os.path.join(DATABASE_PATH, '*.jpg'))
+#         logger.info(f"資料庫中找到 {len(database_files)} 張圖片：{[os.path.basename(f) for f in database_files]}")
+        
+#         if not os.path.exists(OUTPUT_INDEX_PATH):
+#             logger.info("索引不存在，正在生成...")
+#             embeddings, image_paths, file_names = generate_clip_embeddings(DATABASE_PATH, model)
+#             index = create_faiss_index(embeddings, image_paths, file_names, OUTPUT_INDEX_PATH)
+#             index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
+#         else:
+#             index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
+#     except Exception as e:
+#         logger.error(f"初始化失敗: {e}")
+#         sys.exit(1)
+
+# # 檢索相似圖片
+# def retrieve_similar_images(query, model, index, metadata_dict, top_k=1):
+#     try:
+#         if isinstance(query, str):
+#             query = Image.open(query)
+#         query_features = model.encode(query)
+#         query_features = query_features.astype(np.float32).reshape(1, -1)
+#         distances, indices = index.search(query_features, top_k)
+#         retrieved_metadata = [metadata_dict[list(metadata_dict.keys())[int(idx)]] for idx in indices[0]]
+        
+#         if retrieved_metadata:
+#             medication_code = retrieved_metadata[0]["additional_info"]["medicationCode"]
+#             chinese_name = retrieved_metadata[0]["additional_info"]["chineseBrandName"]
+#             return medication_code, chinese_name
+#         return None, None
+#     except Exception as e:
+#         logger.error(f"檢索圖片時出錯: {e}")
+#         return None, None
+
+# # 測試路由
+# @app.route('/test', methods=['GET'])
+# def test():
+#     return jsonify({"message": "Server is running"}), 200
+
+# # API 端點
+# @app.route('/query_image', methods=['POST'])
+# def query_image():
+#     if 'image' not in request.files:
+#         return jsonify({"error": "No image provided"}), 400
+    
+#     file = request.files['image']
+#     try:
+#         query_img = Image.open(file.stream).convert('RGB')
+#         medication_code, chinese_name = retrieve_similar_images(query_img, model, index, metadata_dict)
+        
+#         if medication_code and chinese_name:
+#             return jsonify({"medicationCode": medication_code, "chineseBrandName": chinese_name})
+#         return jsonify({"error": "No match found"}), 404
+#     except Exception as e:
+#         logger.error(f"處理查詢圖片時出錯: {e}")
+#         return jsonify({"error": "Invalid image"}), 400
+
+# # 初始化並啟動
+# if __name__ == '__main__':
+#     initialize()
+#     try:
+#         port = int(os.environ.get("PORT", 5000))
+#         logger.info(f"啟動 Waitress 服務於 http://127.0.0.1:{port}")
+#         serve(app, host='0.0.0.0', port=port, threads=4)
+#     except Exception as e:
+#         logger.error(f"啟動服務失敗: {e}")
+#         sys.exit(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import os
 from glob import glob
 from PIL import Image
@@ -289,8 +547,6 @@ from flask import Flask, request, jsonify
 import json
 import sys
 import io
-import requests
-import zipfile
 import logging
 from waitress import serve
 
@@ -312,108 +568,12 @@ except Exception as e:
     logger.error(f"設定工作目錄失敗: {e}")
     sys.exit(1)
 
-# 下載並解壓檔案
-def download_and_extract_zip(url, output_zip="data.zip", extract_to="."):
-    logger.info("正在下載檔案...")
-    try:
-        response = requests.get(url, stream=True, timeout=30)
-        response.raise_for_status()
-        with open(output_zip, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        logger.info("下載完成，開始解壓...")
-        with zipfile.ZipFile(output_zip, 'r') as zip_ref:
-            zip_ref.extractall(extract_to)
-        os.remove(output_zip)
-        logger.info("解壓完成")
-    except Exception as e:
-        logger.error(f"下載或解壓失敗: {e}")
-        raise
-
 # 設定路徑
-DATABASE_PATH = os.path.join(os.getcwd(), "medicine_images")
 OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
-QUERY_PATH = os.path.join(os.getcwd(), "query_images")
 
 # 初始化全局變數
-model = None
 index = None
 metadata_dict = None
-
-# 定義生成 CLIP 嵌入的函數
-def generate_clip_embeddings(images_path, model):
-    image_paths = glob(os.path.join(images_path, '*.jpg'))
-    if not image_paths:
-        raise Exception(f"No images found in {images_path}")
-    embeddings = []
-    file_names = []
-    
-    logger.info(f"正在為資料庫生成嵌入，找到 {len(image_paths)} 張圖片")
-    for img_path in image_paths:
-        try:
-            image = Image.open(img_path).convert('RGB')
-            embedding = model.encode(image, show_progress_bar=False)
-            embeddings.append(embedding)
-            file_names.append(os.path.basename(img_path))
-            logger.info(f"已處理: {os.path.basename(img_path)}")
-        except Exception as e:
-            logger.error(f"處理 {img_path} 時出錯: {e}")
-            continue
-    
-    if not embeddings:
-        raise Exception("No valid embeddings generated")
-    return embeddings, image_paths, file_names
-
-# 創建 FAISS 索引
-def create_faiss_index(embeddings, image_paths, file_names, output_path):
-    if not embeddings:
-        raise Exception("No embeddings provided for indexing")
-    dimension = len(embeddings[0])
-    index = faiss.IndexFlatIP(dimension)
-    index = faiss.IndexIDMap(index)
-    
-    vectors = np.array(embeddings).astype(np.float32)
-    index.add_with_ids(vectors, np.array(range(len(embeddings))))
-    
-    faiss.write_index(index, output_path)
-    logger.info(f"索引已保存至 {output_path}")
-    
-    metadata = []
-    metadata_path = output_path + '.metadata.json'
-    medicine_info = {
-        "福善美保骨錠-1.jpg": {"medicationCode":"1AMZ08", "genericName":"Alendronate", "chineseBrandName": "福善美保骨錠","englishBrandName": "Fosamax PLUS"},
-        "福善美保骨錠-2.jpg": {"medicationCode":"1AMZ08", "genericName":"Alendronate", "chineseBrandName": "福善美保骨錠","englishBrandName": "Fosamax PLUS"},
-        "芙琳亞錠-1.jpg": {"medicationCode":"1MAC12", "genericName":"Calcium Folinate", "chineseBrandName": "芙琳亞錠","englishBrandName": "Folina"},
-        "芙琳亞錠-2.jpg": {"medicationCode":"1MAC12", "genericName":"Calcium Folinate", "chineseBrandName": "芙琳亞錠","englishBrandName": "Folina"},
-        "達滋克膜衣錠-1.jpg": {"medicationCode":"1MBD06", "genericName":"Lamivudine/Tenofovir/Doravirine", "chineseBrandName": "達滋克膜衣錠","englishBrandName": "FDelstrigo"},
-        "達滋克膜衣錠-2.jpg": {"medicationCode":"1MBD06", "genericName":"Lamivudine/Tenofovir/Doravirine", "chineseBrandName": "達滋克膜衣錠","englishBrandName": "FDelstrigo"},
-        "敵芬妮朵糖衣錠-1.jpg": {"medicationCode":"1MAD01", "genericName":"Diphenidol HCl", "chineseBrandName": "敵芬妮朵糖衣錠","englishBrandName": "Diphenidol"},
-        "解鐵定膜衣錠-1.jpg": {"medicationCode":"1MAD07", "genericName":"Deferasirox", "chineseBrandName": "解鐵定膜衣錠","englishBrandName": "Jadenu"},
-        "解鐵定膜衣錠-2.jpg": {"medicationCode":"1MAD07", "genericName":"Deferasirox", "chineseBrandName": "解鐵定膜衣錠","englishBrandName": "Jadenu"},
-        "佩你安錠-1.jpg": {"medicationCode":"1MAC08", "genericName":"Cyproheptadine HCl", "chineseBrandName": "佩你安錠","englishBrandName": "Pilian"},
-        "佩你安錠-2.jpg": {"medicationCode":"1MAC08", "genericName":"Cyproheptadine HCl", "chineseBrandName": "佩你安錠","englishBrandName": "Pilian"},
-        "法瑪鎮膜衣錠-1.jpg": {"medicationCode":"1MAF07", "genericName":"Famotidine", "chineseBrandName": "法瑪鎮膜衣錠","englishBrandName": "Famotidine"},
-        "法瑪鎮膜衣錠-2.jpg": {"medicationCode":"1MAF07", "genericName":"Famotidine", "chineseBrandName": "法瑪鎮膜衣錠","englishBrandName": "Famotidine"},
-        "睦體康腸衣錠-1.jpg": {"medicationCode":"1AMZ07", "genericName":"Mycophenolate Sodium", "chineseBrandName": "睦體康腸衣錠","englishBrandName": "Myfortic"},
-        "睦體康腸衣錠-2.jpg": {"medicationCode":"1AMZ07", "genericName":"Mycophenolate Sodium", "chineseBrandName": "睦體康腸衣錠","englishBrandName": "Myfortic"},
-        "樂伯克錠-1.jpg": {"medicationCode":"1AMG21", "genericName":"Pramipexole", "chineseBrandName": "樂伯克錠","englishBrandName": "Mirapex"},
-        "樂伯克錠-2.jpg": {"medicationCode":"1AMG21", "genericName":"Pramipexole", "chineseBrandName": "樂伯克錠","englishBrandName": "Mirapex"},
-        "諾博戈膜衣錠-1.jpg": {"medicationCode":"1MDD09", "genericName":"Darolutamide", "chineseBrandName": "諾博戈膜衣錠","englishBrandName": "Nubeqa"},
-        "諾博戈膜衣錠-2.jpg": {"medicationCode":"1MDD09", "genericName":"Darolutamide", "chineseBrandName": "諾博戈膜衣錠","englishBrandName": "Nubeqa"}
-    }
-    for img_path, file_name in zip(image_paths, file_names):
-        info = medicine_info.get(file_name, {"medicationCode": "UNKNOWN", "chineseBrandName": "未知藥品"})
-        metadata.append({
-            "file_name": file_name,
-            "full_path": img_path,
-            "additional_info": info
-        })
-    
-    with open(metadata_path, 'w', encoding='utf-8') as f:
-        json.dump(metadata, f, indent=4)
-    
-    logger.info(f"元數據已保存至 {metadata_path}")
-    return index
 
 # 讀取 FAISS 索引
 def load_faiss_index(index_path):
@@ -428,42 +588,22 @@ def load_faiss_index(index_path):
         logger.error(f"載入索引失敗: {e}")
         raise
 
-# 初始化模型和索引
+# 初始化
 def initialize():
-    global model, index, metadata_dict
+    global index, metadata_dict
     try:
-        logger.info("正在載入模型...")
-        model = SentenceTransformer('clip-ViT-B-32', device='cpu')
-        logger.info("模型載入完成")
-        
-        if not os.path.exists(DATABASE_PATH) or not glob(os.path.join(DATABASE_PATH, "*.jpg")):
-            os.makedirs(DATABASE_PATH, exist_ok=True)
-            download_and_extract_zip(
-                "https://drive.usercontent.google.com/download?id=1rVmGMzxnxs5twJ27A4TeP1TDZb4x3pOF&export=download&authuser=0",
-                extract_to=DATABASE_PATH
-            )
-        
-        if not os.path.exists(QUERY_PATH):
-            os.makedirs(QUERY_PATH)
-            logger.info(f"已創建查詢資料夾: {QUERY_PATH}")
-        
-        database_files = glob(os.path.join(DATABASE_PATH, '*.jpg'))
-        logger.info(f"資料庫中找到 {len(database_files)} 張圖片：{[os.path.basename(f) for f in database_files]}")
-        
         if not os.path.exists(OUTPUT_INDEX_PATH):
-            logger.info("索引不存在，正在生成...")
-            embeddings, image_paths, file_names = generate_clip_embeddings(DATABASE_PATH, model)
-            index = create_faiss_index(embeddings, image_paths, file_names, OUTPUT_INDEX_PATH)
-            index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
-        else:
-            index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
+            logger.error("索引檔案不存在，請預先生成")
+            sys.exit(1)
+        index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
     except Exception as e:
         logger.error(f"初始化失敗: {e}")
         sys.exit(1)
 
 # 檢索相似圖片
-def retrieve_similar_images(query, model, index, metadata_dict, top_k=1):
+def retrieve_similar_images(query, metadata_dict, top_k=1):
     try:
+        model = SentenceTransformer('clip-ViT-B-32', device='cpu')
         if isinstance(query, str):
             query = Image.open(query)
         query_features = model.encode(query)
@@ -474,11 +614,11 @@ def retrieve_similar_images(query, model, index, metadata_dict, top_k=1):
         if retrieved_metadata:
             medication_code = retrieved_metadata[0]["additional_info"]["medicationCode"]
             chinese_name = retrieved_metadata[0]["additional_info"]["chineseBrandName"]
-            return medication_code, chinese_name
-        return None, None
+            return medication_code, chinese_name, model
+        return None, None, model
     except Exception as e:
         logger.error(f"檢索圖片時出錯: {e}")
-        return None, None
+        return None, None, None
 
 # 測試路由
 @app.route('/test', methods=['GET'])
@@ -494,7 +634,7 @@ def query_image():
     file = request.files['image']
     try:
         query_img = Image.open(file.stream).convert('RGB')
-        medication_code, chinese_name = retrieve_similar_images(query_img, model, index, metadata_dict)
+        medication_code, chinese_name, model = retrieve_similar_images(query_img, metadata_dict)
         
         if medication_code and chinese_name:
             return jsonify({"medicationCode": medication_code, "chineseBrandName": chinese_name})
@@ -502,6 +642,8 @@ def query_image():
     except Exception as e:
         logger.error(f"處理查詢圖片時出錯: {e}")
         return jsonify({"error": "Invalid image"}), 400
+    finally:
+        del model  # 釋放模型
 
 # 初始化並啟動
 if __name__ == '__main__':
@@ -509,7 +651,7 @@ if __name__ == '__main__':
     try:
         port = int(os.environ.get("PORT", 5000))
         logger.info(f"啟動 Waitress 服務於 http://127.0.0.1:{port}")
-        serve(app, host='0.0.0.0', port=port, threads=4)
+        serve(app, host='0.0.0.0', port=port, threads=1)
     except Exception as e:
         logger.error(f"啟動服務失敗: {e}")
         sys.exit(1)
