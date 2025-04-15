@@ -1,7 +1,7 @@
 [
     {
         "file_name": "\u4f69\u4f60\u5b89\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u4f69\u4f60\u5b89\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u4f69\u4f60\u5b89\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1MAC08",
             "genericName": "Cyproheptadine HCl",
@@ -11,7 +11,7 @@
     },
     {
         "file_name": "\u4f69\u4f60\u5b89\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u4f69\u4f60\u5b89\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u4f69\u4f60\u5b89\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1MAC08",
             "genericName": "Cyproheptadine HCl",
@@ -21,15 +21,17 @@
     },
     {
         "file_name": "\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320-1.jpg",
         "additional_info": {
-            "medicationCode": "UNKNOWN",
-            "chineseBrandName": "\u672a\u77e5\u85e5\u54c1"
+            "medicationCode": "1MAD01",
+            "genericName": "Diphenidol HCl",
+            "chineseBrandName": "\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320",
+            "englishBrandName": "Diphenidol"
         }
     },
     {
         "file_name": "\u6a02\u4f2f\u514b\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u6a02\u4f2f\u514b\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6a02\u4f2f\u514b\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1AMG21",
             "genericName": "Pramipexole",
@@ -39,7 +41,7 @@
     },
     {
         "file_name": "\u6a02\u4f2f\u514b\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u6a02\u4f2f\u514b\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6a02\u4f2f\u514b\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1AMG21",
             "genericName": "Pramipexole",
@@ -49,7 +51,7 @@
     },
     {
         "file_name": "\u6cd5\u746a\u93ae\u819c\u8863\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u6cd5\u746a\u93ae\u819c\u8863\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6cd5\u746a\u93ae\u819c\u8863\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1MAF07",
             "genericName": "Famotidine",
@@ -59,7 +61,7 @@
     },
     {
         "file_name": "\u6cd5\u746a\u93ae\u819c\u8863\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u6cd5\u746a\u93ae\u819c\u8863\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6cd5\u746a\u93ae\u819c\u8863\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1MAF07",
             "genericName": "Famotidine",
@@ -69,7 +71,7 @@
     },
     {
         "file_name": "\u7766\u9ad4\u5eb7\u8178\u8863\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u7766\u9ad4\u5eb7\u8178\u8863\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u7766\u9ad4\u5eb7\u8178\u8863\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1AMZ07",
             "genericName": "Mycophenolate Sodium",
@@ -79,7 +81,7 @@
     },
     {
         "file_name": "\u7766\u9ad4\u5eb7\u8178\u8863\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u7766\u9ad4\u5eb7\u8178\u8863\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u7766\u9ad4\u5eb7\u8178\u8863\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1AMZ07",
             "genericName": "Mycophenolate Sodium",
@@ -89,7 +91,7 @@
     },
     {
         "file_name": "\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1AMZ08",
             "genericName": "Alendronate",
@@ -99,7 +101,7 @@
     },
     {
         "file_name": "\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1AMZ08",
             "genericName": "Alendronate",
@@ -109,7 +111,7 @@
     },
     {
         "file_name": "\u8299\u7433\u4e9e\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u8299\u7433\u4e9e\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8299\u7433\u4e9e\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1MAC12",
             "genericName": "Calcium Folinate",
@@ -119,7 +121,7 @@
     },
     {
         "file_name": "\u8299\u7433\u4e9e\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u8299\u7433\u4e9e\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8299\u7433\u4e9e\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1MAC12",
             "genericName": "Calcium Folinate",
@@ -129,7 +131,7 @@
     },
     {
         "file_name": "\u89e3\u9435\u5b9a\u819c\u8863\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u89e3\u9435\u5b9a\u819c\u8863\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u89e3\u9435\u5b9a\u819c\u8863\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1MAD07",
             "genericName": "Deferasirox",
@@ -139,7 +141,7 @@
     },
     {
         "file_name": "\u89e3\u9435\u5b9a\u819c\u8863\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u89e3\u9435\u5b9a\u819c\u8863\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u89e3\u9435\u5b9a\u819c\u8863\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1MAD07",
             "genericName": "Deferasirox",
@@ -149,7 +151,7 @@
     },
     {
         "file_name": "\u8afe\u535a\u6208\u819c\u8863\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u8afe\u535a\u6208\u819c\u8863\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8afe\u535a\u6208\u819c\u8863\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1MDD09",
             "genericName": "Darolutamide",
@@ -159,7 +161,7 @@
     },
     {
         "file_name": "\u8afe\u535a\u6208\u819c\u8863\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u8afe\u535a\u6208\u819c\u8863\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8afe\u535a\u6208\u819c\u8863\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1MDD09",
             "genericName": "Darolutamide",
@@ -169,7 +171,7 @@
     },
     {
         "file_name": "\u9054\u6ecb\u514b\u819c\u8863\u9320-1.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u9054\u6ecb\u514b\u819c\u8863\u9320-1.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u9054\u6ecb\u514b\u819c\u8863\u9320-1.jpg",
         "additional_info": {
             "medicationCode": "1MBD06",
             "genericName": "Lamivudine/Tenofovir/Doravirine",
@@ -179,7 +181,7 @@
     },
     {
         "file_name": "\u9054\u6ecb\u514b\u819c\u8863\u9320-2.jpg",
-        "full_path": "c:\\workspace_python\\medication\\medicine_images\\\u9054\u6ecb\u514b\u819c\u8863\u9320-2.jpg",
+        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u9054\u6ecb\u514b\u819c\u8863\u9320-2.jpg",
         "additional_info": {
             "medicationCode": "1MBD06",
             "genericName": "Lamivudine/Tenofovir/Doravirine",
