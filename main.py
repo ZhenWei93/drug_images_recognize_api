@@ -1384,27 +1384,157 @@
 
 
 
-## vercel 版本
-## 無下載邏輯
-from flask import Flask, request, jsonify
+# ## vercel 版本
+# ## 無下載邏輯
+# from flask import Flask, request, jsonify
+# import os
+# import faiss
+# import numpy as np
+# from PIL import Image
+# from sentence_transformers import SentenceTransformer
+# import json
+# import logging
+# import sys
+# import io
+
+# app = Flask(__name__)
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# logger = logging.getLogger(__name__)
+
+# # 設定 UTF-8 編碼
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+# # 設定工作目錄
+# try:
+#     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+#     logger.info(f"工作目錄設為: {os.getcwd()}")
+# except Exception as e:
+#     logger.error(f"設定工作目錄失敗: {e}")
+#     sys.exit(1)
+
+# # 設定路徑
+# DATABASE_PATH = os.path.join(os.getcwd(), "medicine_images", "compressed")
+# OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
+# model = None
+# index = None
+# metadata_dict = None
+
+# # 讀取 FAISS 索引
+# def load_faiss_index(index_path):
+#     try:
+#         index = faiss.read_index(index_path)
+#         with open(index_path + '.metadata.json', 'r', encoding='utf-8') as f:
+#             metadata = json.load(f)
+#         metadata_dict = {item["file_name"]: item for item in metadata}
+#         logger.info(f"索引已從 {index_path} 載入，包含 {len(metadata_dict)} 張圖片")
+#         return index, metadata_dict
+#     except Exception as e:
+#         logger.error(f"載入索引失敗: {e}")
+#         raise
+
+# # 初始化
+# def initialize():
+#     global index, metadata_dict
+#     try:
+#         if not os.path.exists(DATABASE_PATH):
+#             logger.error(f"圖片資料夾不存在: {DATABASE_PATH}")
+#             raise Exception(f"Image folder {DATABASE_PATH} does not exist")
+#         if not os.path.exists(OUTPUT_INDEX_PATH) or not os.path.exists(OUTPUT_INDEX_PATH + '.metadata.json'):
+#             logger.error(f"索引檔案不存在: {OUTPUT_INDEX_PATH}")
+#             raise Exception(f"Index file {OUTPUT_INDEX_PATH} or metadata not found")
+#         index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
+#         logger.info("索引初始化完成")
+#     except Exception as e:
+#         logger.error(f"初始化失敗: {e}")
+#         raise
+
+# # 檢索相似圖片
+# @app.route('/api/query_image', methods=['POST'])
+# def query_image():
+#     global model, metadata_dict, index
+#     try:
+#         if not model:
+#             logger.info("正在載入 SentenceTransformer 模型...")
+#             model = SentenceTransformer('clip-ViT-B-32', device='cpu')
+#             logger.info("模型載入完成")
+#         if 'image' not in request.files:
+#             logger.error("未提供圖片")
+#             return jsonify({"error": "No image provided"}), 400
+#         file = request.files['image']
+#         if not file.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
+#             logger.error(f"不支援的檔案格式: {file.filename}")
+#             return jsonify({"error": "Unsupported image format. Use JPG or PNG"}), 400
+        
+#         file.stream.seek(0)
+#         query_img = Image.open(file.stream).convert('RGB')
+#         query_features = model.encode(query_img, show_progress_bar=False)
+#         query_features = query_features.astype(np.float32).reshape(1, -1)
+#         distances, indices = index.search(query_features, 1)
+#         result = metadata_dict[list(metadata_dict.keys())[int(indices[0][0])]]
+#         logger.info(f"匹配成功: {result['additional_info']['chineseBrandName']} ({result['additional_info']['medicationCode']})")
+#         return jsonify({
+#             "medicationCode": result["additional_info"]["medicationCode"],
+#             "chineseBrandName": result["additional_info"]["chineseBrandName"]
+#         })
+#     except Exception as e:
+#         logger.error(f"處理圖片失敗: {e}")
+#         return jsonify({"error": "Invalid image", "details": str(e)}), 400
+#     finally:
+#         if 'query_img' in locals():
+#             query_img.close()
+
+# # 測試路由
+# @app.route('/api/test', methods=['GET'])
+# def test():
+#     logger.info("收到 /api/test 請求")
+#     return jsonify({"message": "Server is running"}), 200
+
+# if __name__ == '__main__':
+#     initialize()
+#     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Railway版本
+## 有下載邏輯
 import os
-import faiss
-import numpy as np
+from glob import glob
 from PIL import Image
+import numpy as np
+import faiss
 from sentence_transformers import SentenceTransformer
+from flask import Flask, request, jsonify
 import json
-import logging
 import sys
 import io
+import logging
+from waitress import serve
 
-app = Flask(__name__)
+# 設定日誌
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # 設定 UTF-8 編碼
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-# 設定工作目錄
+# 初始化 Flask 應用
+app = Flask(__name__)
+
+# 確保工作目錄
 try:
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     logger.info(f"工作目錄設為: {os.getcwd()}")
@@ -1415,9 +1545,11 @@ except Exception as e:
 # 設定路徑
 DATABASE_PATH = os.path.join(os.getcwd(), "medicine_images", "compressed")
 OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
-model = None
+
+# 初始化全局變數
 index = None
 metadata_dict = None
+model = None
 
 # 讀取 FAISS 索引
 def load_faiss_index(index_path):
@@ -1446,12 +1578,12 @@ def initialize():
         logger.info("索引初始化完成")
     except Exception as e:
         logger.error(f"初始化失敗: {e}")
-        raise
+        sys.exit(1)
 
 # 檢索相似圖片
 @app.route('/api/query_image', methods=['POST'])
 def query_image():
-    global model, metadata_dict, index
+    global model, index, metadata_dict
     try:
         if not model:
             logger.info("正在載入 SentenceTransformer 模型...")
@@ -1491,25 +1623,13 @@ def test():
 
 if __name__ == '__main__':
     initialize()
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    try:
+        port = int(os.environ.get("PORT", 8080))
+        logger.info(f"啟動 Waitress 服務於 http://0.0.0.0:{port}")
+        serve(app, host='0.0.0.0', port=port, threads=4)
+    except Exception as e:
+        logger.error(f"啟動服務失敗: {e}")
+        sys.exit(1)
 
 
 
