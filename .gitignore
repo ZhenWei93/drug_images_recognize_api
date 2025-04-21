@@ -1,7 +1,10 @@
 .venv/
 __pycache__/
 *.pyc
-medicine_images/
+medicine_images/*
+!medicine_images/medicine_images/compressed/
 query_images/
 data.zip
 *.bak
+# .env
+# *.key.env

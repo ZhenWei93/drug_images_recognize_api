@@ -1,191 +1,191 @@
 [
     {
-        "file_name": "\u4f69\u4f60\u5b89\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u4f69\u4f60\u5b89\u9320-1.jpg",
+        "file_name": "佩你安錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\佩你安錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MAC08",
             "genericName": "Cyproheptadine HCl",
-            "chineseBrandName": "\u4f69\u4f60\u5b89\u9320",
+            "chineseBrandName": "佩你安錠",
             "englishBrandName": "Pilian"
         }
     },
     {
-        "file_name": "\u4f69\u4f60\u5b89\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u4f69\u4f60\u5b89\u9320-2.jpg",
+        "file_name": "佩你安錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\佩你安錠-2.jpg",
         "additional_info": {
             "medicationCode": "1MAC08",
             "genericName": "Cyproheptadine HCl",
-            "chineseBrandName": "\u4f69\u4f60\u5b89\u9320",
+            "chineseBrandName": "佩你安錠",
             "englishBrandName": "Pilian"
         }
     },
     {
-        "file_name": "\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320-1.jpg",
+        "file_name": "敵芬妮朵糖衣錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\敵芬妮朵糖衣錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MAD01",
             "genericName": "Diphenidol HCl",
-            "chineseBrandName": "\u6575\u82ac\u59ae\u6735\u7cd6\u8863\u9320",
+            "chineseBrandName": "敵芬妮朵糖衣錠",
             "englishBrandName": "Diphenidol"
         }
     },
     {
-        "file_name": "\u6a02\u4f2f\u514b\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6a02\u4f2f\u514b\u9320-1.jpg",
+        "file_name": "樂伯克錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\樂伯克錠-1.jpg",
         "additional_info": {
             "medicationCode": "1AMG21",
             "genericName": "Pramipexole",
-            "chineseBrandName": "\u6a02\u4f2f\u514b\u9320",
+            "chineseBrandName": "樂伯克錠",
             "englishBrandName": "Mirapex"
         }
     },
     {
-        "file_name": "\u6a02\u4f2f\u514b\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6a02\u4f2f\u514b\u9320-2.jpg",
+        "file_name": "樂伯克錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\樂伯克錠-2.jpg",
         "additional_info": {
             "medicationCode": "1AMG21",
             "genericName": "Pramipexole",
-            "chineseBrandName": "\u6a02\u4f2f\u514b\u9320",
+            "chineseBrandName": "樂伯克錠",
             "englishBrandName": "Mirapex"
         }
     },
     {
-        "file_name": "\u6cd5\u746a\u93ae\u819c\u8863\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6cd5\u746a\u93ae\u819c\u8863\u9320-1.jpg",
+        "file_name": "法瑪鎮膜衣錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\法瑪鎮膜衣錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MAF07",
             "genericName": "Famotidine",
-            "chineseBrandName": "\u6cd5\u746a\u93ae\u819c\u8863\u9320",
+            "chineseBrandName": "法瑪鎮膜衣錠",
             "englishBrandName": "Famotidine"
         }
     },
     {
-        "file_name": "\u6cd5\u746a\u93ae\u819c\u8863\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u6cd5\u746a\u93ae\u819c\u8863\u9320-2.jpg",
+        "file_name": "法瑪鎮膜衣錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\法瑪鎮膜衣錠-2.jpg",
         "additional_info": {
             "medicationCode": "1MAF07",
             "genericName": "Famotidine",
-            "chineseBrandName": "\u6cd5\u746a\u93ae\u819c\u8863\u9320",
+            "chineseBrandName": "法瑪鎮膜衣錠",
             "englishBrandName": "Famotidine"
         }
     },
     {
-        "file_name": "\u7766\u9ad4\u5eb7\u8178\u8863\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u7766\u9ad4\u5eb7\u8178\u8863\u9320-1.jpg",
+        "file_name": "睦體康腸衣錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\睦體康腸衣錠-1.jpg",
         "additional_info": {
             "medicationCode": "1AMZ07",
             "genericName": "Mycophenolate Sodium",
-            "chineseBrandName": "\u7766\u9ad4\u5eb7\u8178\u8863\u9320",
+            "chineseBrandName": "睦體康腸衣錠",
             "englishBrandName": "Myfortic"
         }
     },
     {
-        "file_name": "\u7766\u9ad4\u5eb7\u8178\u8863\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u7766\u9ad4\u5eb7\u8178\u8863\u9320-2.jpg",
+        "file_name": "睦體康腸衣錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\睦體康腸衣錠-2.jpg",
         "additional_info": {
             "medicationCode": "1AMZ07",
             "genericName": "Mycophenolate Sodium",
-            "chineseBrandName": "\u7766\u9ad4\u5eb7\u8178\u8863\u9320",
+            "chineseBrandName": "睦體康腸衣錠",
             "englishBrandName": "Myfortic"
         }
     },
     {
-        "file_name": "\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-1.jpg",
+        "file_name": "福善美保骨錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\福善美保骨錠-1.jpg",
         "additional_info": {
             "medicationCode": "1AMZ08",
             "genericName": "Alendronate",
-            "chineseBrandName": "\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320",
+            "chineseBrandName": "福善美保骨錠",
             "englishBrandName": "Fosamax PLUS"
         }
     },
     {
-        "file_name": "\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320-2.jpg",
+        "file_name": "福善美保骨錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\福善美保骨錠-2.jpg",
         "additional_info": {
             "medicationCode": "1AMZ08",
             "genericName": "Alendronate",
-            "chineseBrandName": "\u798f\u5584\u7f8e\u4fdd\u9aa8\u9320",
+            "chineseBrandName": "福善美保骨錠",
             "englishBrandName": "Fosamax PLUS"
         }
     },
     {
-        "file_name": "\u8299\u7433\u4e9e\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8299\u7433\u4e9e\u9320-1.jpg",
+        "file_name": "芙琳亞錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\芙琳亞錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MAC12",
             "genericName": "Calcium Folinate",
-            "chineseBrandName": "\u8299\u7433\u4e9e\u9320",
+            "chineseBrandName": "芙琳亞錠",
             "englishBrandName": "Folina"
         }
     },
     {
-        "file_name": "\u8299\u7433\u4e9e\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8299\u7433\u4e9e\u9320-2.jpg",
+        "file_name": "芙琳亞錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\芙琳亞錠-2.jpg",
         "additional_info": {
             "medicationCode": "1MAC12",
             "genericName": "Calcium Folinate",
-            "chineseBrandName": "\u8299\u7433\u4e9e\u9320",
+            "chineseBrandName": "芙琳亞錠",
             "englishBrandName": "Folina"
         }
     },
     {
-        "file_name": "\u89e3\u9435\u5b9a\u819c\u8863\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u89e3\u9435\u5b9a\u819c\u8863\u9320-1.jpg",
+        "file_name": "解鐵定膜衣錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\解鐵定膜衣錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MAD07",
             "genericName": "Deferasirox",
-            "chineseBrandName": "\u89e3\u9435\u5b9a\u819c\u8863\u9320",
+            "chineseBrandName": "解鐵定膜衣錠",
             "englishBrandName": "Jadenu"
         }
     },
     {
-        "file_name": "\u89e3\u9435\u5b9a\u819c\u8863\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u89e3\u9435\u5b9a\u819c\u8863\u9320-2.jpg",
+        "file_name": "解鐵定膜衣錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\解鐵定膜衣錠-2.jpg",
         "additional_info": {
             "medicationCode": "1MAD07",
             "genericName": "Deferasirox",
-            "chineseBrandName": "\u89e3\u9435\u5b9a\u819c\u8863\u9320",
+            "chineseBrandName": "解鐵定膜衣錠",
             "englishBrandName": "Jadenu"
         }
     },
     {
-        "file_name": "\u8afe\u535a\u6208\u819c\u8863\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8afe\u535a\u6208\u819c\u8863\u9320-1.jpg",
+        "file_name": "諾博戈膜衣錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\諾博戈膜衣錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MDD09",
             "genericName": "Darolutamide",
-            "chineseBrandName": "\u8afe\u535a\u6208\u819c\u8863\u9320",
+            "chineseBrandName": "諾博戈膜衣錠",
             "englishBrandName": "Nubeqa"
         }
     },
     {
-        "file_name": "\u8afe\u535a\u6208\u819c\u8863\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u8afe\u535a\u6208\u819c\u8863\u9320-2.jpg",
+        "file_name": "諾博戈膜衣錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\諾博戈膜衣錠-2.jpg",
         "additional_info": {
             "medicationCode": "1MDD09",
             "genericName": "Darolutamide",
-            "chineseBrandName": "\u8afe\u535a\u6208\u819c\u8863\u9320",
+            "chineseBrandName": "諾博戈膜衣錠",
             "englishBrandName": "Nubeqa"
         }
     },
     {
-        "file_name": "\u9054\u6ecb\u514b\u819c\u8863\u9320-1.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u9054\u6ecb\u514b\u819c\u8863\u9320-1.jpg",
+        "file_name": "達滋克膜衣錠-1.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\達滋克膜衣錠-1.jpg",
         "additional_info": {
             "medicationCode": "1MBD06",
             "genericName": "Lamivudine/Tenofovir/Doravirine",
-            "chineseBrandName": "\u9054\u6ecb\u514b\u819c\u8863\u9320",
+            "chineseBrandName": "達滋克膜衣錠",
             "englishBrandName": "FDelstrigo"
         }
     },
     {
-        "file_name": "\u9054\u6ecb\u514b\u819c\u8863\u9320-2.jpg",
-        "full_path": "C:\\workspace_python\\medication\\medicine_images\\medicine_images\\\u9054\u6ecb\u514b\u819c\u8863\u9320-2.jpg",
+        "file_name": "達滋克膜衣錠-2.jpg",
+        "full_path": "c:\\workspace_python\\medication\\medicine_images\\compressed\\達滋克膜衣錠-2.jpg",
         "additional_info": {
             "medicationCode": "1MBD06",
             "genericName": "Lamivudine/Tenofovir/Doravirine",
-            "chineseBrandName": "\u9054\u6ecb\u514b\u819c\u8863\u9320",
+            "chineseBrandName": "達滋克膜衣錠",
             "englishBrandName": "FDelstrigo"
         }
     }
