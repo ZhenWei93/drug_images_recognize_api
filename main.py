@@ -573,6 +573,7 @@ except Exception as e:
 
 # 設定路徑
 OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
+IMAGE_DIR = os.path.join(os.getcwd(), "medicine_images", "compressed")
 
 # 初始化全局變數
 index = None
@@ -641,6 +642,9 @@ def retrieve_similar_images(query, metadata_dict, top_k=1):
     except Exception as e:
         logger.error(f"檢索圖片時出錯: {e}", exc_info=True)
         return None, None
+    finally:
+        if isinstance(query, Image.Image):
+            query.close()
 
 # 測試路由
 @app.route('/test', methods=['GET'])
@@ -650,7 +654,7 @@ def test():
 
 # API 端點
 @app.route('/query_image', methods=['POST'])
-def query_image():
+def query_image():    
     logger.debug("收到 /query_image 請求")
     if 'image' not in request.files:
         logger.error("未提供圖片")
