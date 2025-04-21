@@ -540,124 +540,124 @@
 #沒有下載邏輯的版本
 # 這個版本假設資料庫已經存在於指定的路徑中，並不會自動下載資料庫
 #優化版
-import os
-from glob import glob
-from PIL import Image
-import numpy as np
-import faiss
-from sentence_transformers import SentenceTransformer
-from flask import Flask, request, jsonify
-import json
-import sys
-import io
-import logging
-from waitress import serve
+# import os
+# from glob import glob
+# from PIL import Image
+# import numpy as np
+# import faiss
+# from sentence_transformers import SentenceTransformer
+# from flask import Flask, request, jsonify
+# import json
+# import sys
+# import io
+# import logging
+# from waitress import serve
 
-# 設定日誌
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# # 設定日誌
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# logger = logging.getLogger(__name__)
 
-# 設定 UTF-8 編碼
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+# # 設定 UTF-8 編碼
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-# 初始化 Flask 應用
-app = Flask(__name__)
+# # 初始化 Flask 應用
+# app = Flask(__name__)
 
-# 確保工作目錄
-try:
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    logger.info(f"工作目錄設為: {os.getcwd()}")
-except Exception as e:
-    logger.error(f"設定工作目錄失敗: {e}")
-    sys.exit(1)
+# # 確保工作目錄
+# try:
+#     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+#     logger.info(f"工作目錄設為: {os.getcwd()}")
+# except Exception as e:
+#     logger.error(f"設定工作目錄失敗: {e}")
+#     sys.exit(1)
 
-# 設定路徑
-OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
+# # 設定路徑
+# OUTPUT_INDEX_PATH = os.path.join(os.getcwd(), "vector.index")
 
-# 初始化全局變數
-index = None
-metadata_dict = None
+# # 初始化全局變數
+# index = None
+# metadata_dict = None
 
-# 讀取 FAISS 索引
-def load_faiss_index(index_path):
-    try:
-        index = faiss.read_index(index_path)
-        with open(index_path + '.metadata.json', 'r', encoding='utf-8') as f:
-            metadata = json.load(f)
-        metadata_dict = {item["file_name"]: item for item in metadata}
-        logger.info(f"索引已從 {index_path} 載入")
-        return index, metadata_dict
-    except Exception as e:
-        logger.error(f"載入索引失敗: {e}")
-        raise
+# # 讀取 FAISS 索引
+# def load_faiss_index(index_path):
+#     try:
+#         index = faiss.read_index(index_path)
+#         with open(index_path + '.metadata.json', 'r', encoding='utf-8') as f:
+#             metadata = json.load(f)
+#         metadata_dict = {item["file_name"]: item for item in metadata}
+#         logger.info(f"索引已從 {index_path} 載入")
+#         return index, metadata_dict
+#     except Exception as e:
+#         logger.error(f"載入索引失敗: {e}")
+#         raise
 
-# 初始化
-def initialize():
-    global index, metadata_dict
-    try:
-        if not os.path.exists(OUTPUT_INDEX_PATH):
-            logger.error("索引檔案不存在，請預先生成")
-            sys.exit(1)
-        index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
-    except Exception as e:
-        logger.error(f"初始化失敗: {e}")
-        sys.exit(1)
+# # 初始化
+# def initialize():
+#     global index, metadata_dict
+#     try:
+#         if not os.path.exists(OUTPUT_INDEX_PATH):
+#             logger.error("索引檔案不存在，請預先生成")
+#             sys.exit(1)
+#         index, metadata_dict = load_faiss_index(OUTPUT_INDEX_PATH)
+#     except Exception as e:
+#         logger.error(f"初始化失敗: {e}")
+#         sys.exit(1)
 
-# 檢索相似圖片
-def retrieve_similar_images(query, metadata_dict, top_k=1):
-    try:
-        model = SentenceTransformer('clip-ViT-B-32', device='cpu')
-        if isinstance(query, str):
-            query = Image.open(query)
-        query_features = model.encode(query)
-        query_features = query_features.astype(np.float32).reshape(1, -1)
-        distances, indices = index.search(query_features, top_k)
-        retrieved_metadata = [metadata_dict[list(metadata_dict.keys())[int(idx)]] for idx in indices[0]]
+# # 檢索相似圖片
+# def retrieve_similar_images(query, metadata_dict, top_k=1):
+#     try:
+#         model = SentenceTransformer('clip-ViT-B-32', device='cpu')
+#         if isinstance(query, str):
+#             query = Image.open(query)
+#         query_features = model.encode(query)
+#         query_features = query_features.astype(np.float32).reshape(1, -1)
+#         distances, indices = index.search(query_features, top_k)
+#         retrieved_metadata = [metadata_dict[list(metadata_dict.keys())[int(idx)]] for idx in indices[0]]
         
-        if retrieved_metadata:
-            medication_code = retrieved_metadata[0]["additional_info"]["medicationCode"]
-            chinese_name = retrieved_metadata[0]["additional_info"]["chineseBrandName"]
-            return medication_code, chinese_name, model
-        return None, None, model
-    except Exception as e:
-        logger.error(f"檢索圖片時出錯: {e}")
-        return None, None, None
+#         if retrieved_metadata:
+#             medication_code = retrieved_metadata[0]["additional_info"]["medicationCode"]
+#             chinese_name = retrieved_metadata[0]["additional_info"]["chineseBrandName"]
+#             return medication_code, chinese_name, model
+#         return None, None, model
+#     except Exception as e:
+#         logger.error(f"檢索圖片時出錯: {e}")
+#         return None, None, None
 
-# 測試路由
-@app.route('/test', methods=['GET'])
-def test():
-    return jsonify({"message": "Server is running"}), 200
+# # 測試路由
+# @app.route('/test', methods=['GET'])
+# def test():
+#     return jsonify({"message": "Server is running"}), 200
 
-# API 端點
-@app.route('/query_image', methods=['POST'])
-def query_image():
-    if 'image' not in request.files:
-        return jsonify({"error": "No image provided"}), 400
+# # API 端點
+# @app.route('/query_image', methods=['POST'])
+# def query_image():
+#     if 'image' not in request.files:
+#         return jsonify({"error": "No image provided"}), 400
     
-    file = request.files['image']
-    try:
-        query_img = Image.open(file.stream).convert('RGB')
-        medication_code, chinese_name, model = retrieve_similar_images(query_img, metadata_dict)
+#     file = request.files['image']
+#     try:
+#         query_img = Image.open(file.stream).convert('RGB')
+#         medication_code, chinese_name, model = retrieve_similar_images(query_img, metadata_dict)
         
-        if medication_code and chinese_name:
-            return jsonify({"medicationCode": medication_code, "chineseBrandName": chinese_name})
-        return jsonify({"error": "No match found"}), 404
-    except Exception as e:
-        logger.error(f"處理查詢圖片時出錯: {e}")
-        return jsonify({"error": "Invalid image"}), 400
-    finally:
-        del model  # 釋放模型
+#         if medication_code and chinese_name:
+#             return jsonify({"medicationCode": medication_code, "chineseBrandName": chinese_name})
+#         return jsonify({"error": "No match found"}), 404
+#     except Exception as e:
+#         logger.error(f"處理查詢圖片時出錯: {e}")
+#         return jsonify({"error": "Invalid image"}), 400
+#     finally:
+#         del model  # 釋放模型
 
-# 初始化並啟動
-if __name__ == '__main__':
-    initialize()
-    try:
-        port = int(os.environ.get("PORT", 5000))
-        logger.info(f"啟動 Waitress 服務於 http://0.0.0.0:{port}")
-        serve(app, host='0.0.0.0', port=port, threads=1)
-    except Exception as e:
-        logger.error(f"啟動服務失敗: {e}")
-        sys.exit(1)
+# # 初始化並啟動
+# if __name__ == '__main__':
+#     initialize()
+#     try:
+#         port = int(os.environ.get("PORT", 5000))
+#         logger.info(f"啟動 Waitress 服務於 http://0.0.0.0:{port}")
+#         serve(app, host='0.0.0.0', port=port, threads=1)
+#     except Exception as e:
+#         logger.error(f"啟動服務失敗: {e}")
+#         sys.exit(1)
 
 
 
@@ -905,3 +905,92 @@ if __name__ == '__main__':
 #     except Exception as e:
 #         logger.error(f"啟動服務失敗: {e}")
 #         sys.exit(1)
+
+
+
+
+
+# 優化版2
+import os
+from flask import Flask, request, jsonify
+import logging
+from waitress import serve
+from PIL import Image
+import numpy as np
+from sentence_transformers import SentenceTransformer
+import faiss
+import json
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+app = Flask(__name__)
+
+# 載入索引和元數據
+logger.info(f"工作目錄設為: {os.getcwd()}")
+index = faiss.read_index("vector.index")
+with open("vector.index.metadata.json", "r", encoding='utf-8') as f:
+    metadata_dict = json.load(f)
+logger.info("索引已從 vector.index 載入")
+
+@app.route('/test', methods=['GET'])
+def test():
+    logger.info("收到 /test 請求")
+    return jsonify({"message": "Server is running"}), 200
+
+@app.route('/query_image', methods=['POST'])
+def query_image():
+    logger.info("收到 /query_image 請求")
+    if 'image' not in request.files:
+        logger.error("未提供圖片")
+        return jsonify({"error": "No image provided"}), 400
+    
+    file = request.files['image']
+    logger.info(f"收到圖片檔案: {file.filename}")
+    
+    model = None
+    query_img = None
+    try:
+        if not file.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
+            logger.error(f"不支援的檔案格式: {file.filename}")
+            return jsonify({"error": "Unsupported image format. Use JPG or PNG"}), 400
+        
+        file.stream.seek(0)
+        query_img = Image.open(file.stream).convert('RGB')
+        logger.info("圖片成功載入")
+        
+        model = SentenceTransformer('clip-ViT-B-32', device='cpu')
+        logger.info("模型載入完成")
+        
+        query_features = model.encode(query_img, show_progress_bar=False)
+        query_features = query_features.astype(np.float32).reshape(1, -1)
+        logger.info("圖片嵌入向量生成完成")
+        
+        distances, indices = index.search(query_features, top_k=1)
+        logger.info(f"索引查詢完成，找到索引: {indices}")
+        
+        retrieved_metadata = [metadata_dict[list(metadata_dict.keys())[int(idx)]] for idx in indices[0]]
+        if retrieved_metadata:
+            medication_code = retrieved_metadata[0]["additional_info"]["medicationCode"]
+            chinese_name = retrieved_metadata[0]["additional_info"]["chineseBrandName"]
+            logger.info(f"匹配成功: {chinese_name} ({medication_code})")
+            return jsonify({"medicationCode": medication_code, "chineseBrandName": chinese_name})
+        
+        logger.warning("未找到匹配圖片")
+        return jsonify({"error": "No match found"}), 404
+    
+    except Exception as e:
+        logger.error(f"處理圖片查詢失敗: {str(e)}", exc_info=True)
+        return jsonify({"error": "Server error", "details": str(e)}), 500
+    finally:
+        if query_img:
+            query_img.close()
+            logger.info("圖片資源已釋放")
+        if model:
+            del model
+            logger.info("模型已釋放")
+
+if __name__ == '__main__':
+    logger.info("啟動 Flask 服務")
+    port = int(os.environ.get("PORT", 5000))
+    serve(app, host='0.0.0.0', port=port, threads=1)
